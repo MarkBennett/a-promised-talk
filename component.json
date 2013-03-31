@@ -1,0 +1,12 @@
+{
+  "name": "a-promised-talk",
+  "version": "0.0.0",
+  "dependencies": {
+    "reveal.js": "~6ece551f8aeedff2c62fdd447240a844b2948c05"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
