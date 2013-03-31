@@ -1,0 +1,26 @@
+{
+  "name": "a-promised-talk",
+  "version": "0.0.0",
+  "description": "A talk on promises with examples of how to use them.",
+  "main": "index.js",
+  "dependencies": {
+    "bower": "~0.8.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/markbennett/a-promised-talk"
+  },
+  "keywords": [
+    "commonjs",
+    "promises",
+    "promise",
+    "talk",
+    "slides"
+  ],
+  "author": "Mark Bennett",
+  "license": "BSD"
+}
