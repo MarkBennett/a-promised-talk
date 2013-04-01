@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Test</title>
+
+		<meta name="description" content="A Promised Talk is a presentation on using CommonJS promises to make simple, readable, and maintainable asynchronous code in JavaScript.">
+		<meta name="author" content="Mark Bennett">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="components/reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="components/reveal.js/css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="components/reveal.js/lib/css/zenburn.css">
+
+		<script src="components/reveal.js/lib/js/head.min.js"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>A Promised Talk</h1>
+					<h3>Writing simple, readable, and maintatable asych JavaScript</h3>
+				</section>
+				<section>
+					<h1>The problem</h1>
+					<pre>
+						<code>
+var files = ['a.json','b.json','c.json'],
+		resources = [];
+
+files.forEach(function(file) {
+	loadFile({
+		success: function(content) {
+			resources.push(content);
+			if (files.length === resources.length) {
+				// resources loaded
+				createServer(function(server) {
+					server.on_request = function(req) {
+						// Handle request...
+					};
+					server.listen(function() {
+						app.trigger("server-up", server);
+					}, function(msg) {
+						app.error("Unable to start server! " + msg); 
+					});
+				}, function(error) {
+					app.error("Can't create the server");
+				}) 
+		},
+		error: function(msg) {
+			app.error("Unable to load file:" + msg);
+		}
+	});
+});
+						</code>
+					</pre>
+				</section>
+			</div>
+		</div>
+
+		<script src="components/reveal.js/js/reveal.js"></script>
+		<script>
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+
+		</script>
+	</body>
+</html>
