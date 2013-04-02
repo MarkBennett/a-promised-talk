@@ -100,7 +100,49 @@ function(error_msg) {
               </code>
             </pre>
           </section>
-        </section>    
+        </section>
+        <section>
+          <section>
+            <h2>Improving readability</h2>
+          </section>
+          <section>
+            <pre>
+              <code>
+var files = ['a.json','b.json','c.json'],
+    resources = [];
+
+Q.all(files.map(function(file) {
+  return loadFile(file);
+})).
+then(function(content) {
+  // resources loaded
+  return createServer();
+}, function(msg) {
+  app.error("Unable to load file:" + msg);
+}).
+then(function(server) {
+  server.on_request = function(req) {
+    // Handle request...
+  };
+  return server.listen();
+}, function(err_msg) {
+  app.error("Can't create the server");
+}).
+then(function(server) {
+  // Server is listening
+  app.registerServer(server, function(app, err) {
+    if (err !== undefined) {
+      app.error("Unable to register that this server is running.");
+    }
+  });
+  },
+  function(err_msg) {
+    app.error("Unable to start server! " + msg); 
+});
+              </code>
+            </pre>
+          </section>
+        </section>
 			</div>
 		</div>
 
