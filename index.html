@@ -26,40 +26,81 @@
 					<h1>A Promised Talk</h1>
 					<h3>Writing simple, readable, and maintatable asych JavaScript</h3>
 				</section>
-				<section>
-					<h1>The problem</h1>
-					<pre>
-						<code>
-var files = ['a.json','b.json','c.json'],
-		resources = [];
-
-files.forEach(function(file) {
-	loadFile({
-		success: function(content) {
-			resources.push(content);
-			if (files.length === resources.length) {
-				// resources loaded
-				createServer(function(server) {
-					server.on_request = function(req) {
-						// Handle request...
-					};
-					server.listen(function() {
-						app.trigger("server-up", server);
-					}, function(msg) {
-						app.error("Unable to start server! " + msg); 
-					});
-				}, function(error) {
-					app.error("Can't create the server");
-				}) 
-		},
-		error: function(msg) {
-			app.error("Unable to load file:" + msg);
-		}
-	});
-});
-						</code>
-					</pre>
+        <section>
+          <h2>JavaScript = Asynchronous Code</h2>
 				</section>
+				<section>
+          <section>
+            <h1>The problem</h1>
+            <pre>
+              <code>
+  var files = ['a.json','b.json','c.json'],
+      resources = [];
+
+  files.forEach(function(file) {
+    loadFile({
+      success: function(content) {
+        resources.push(content);
+        if (files.length === resources.length) {
+          // resources loaded
+          createServer(function(server) {
+            server.on_request = function(req) {
+              // Handle request...
+            };
+            server.listen(function() {
+              app.registerServer(server, function(app, err) {
+                if (err !== undefined) {
+                  app.error("Unable to register that this server is running.");
+                }
+              });
+            }, function(msg) {
+              app.error("Unable to start server! " + msg); 
+            });
+          }, function(error) {
+            app.error("Can't create the server");
+          });
+        }
+      },
+      error: function(msg) {
+        app.error("Unable to load file:" + msg);
+      }
+    });
+  });
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Issues</h3>
+            <ol>
+              <li>Readability</li>
+              <li>Error handling</li>
+              <li>Coupling</li>
+            </ol>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Promises</h2>
+          </section>
+          <section>
+            <h3><a href="http://promises-aplus.github.com/promises-spec/">Promise A+ Spec</a></h3>
+            <blockquote cite="http://promises-aplus.github.com/promises-spec/">A promise represents a value that may not be available yet. The primary method for interacting with a promise is its then() method.</blockquote>
+          </section>
+          <section>
+            <h3>An example</h3>
+            <pre>
+              <code>
+var a_promise = retrieveFile();
+a_promise.then(function(file) {
+  // The awesome goes here
+},
+function(error_msg) {
+  // Handle the errors
+});
+              </code>
+            </pre>
+          </section>
+        </section>    
 			</div>
 		</div>
 
@@ -82,7 +123,7 @@ files.forEach(function(file) {
 					{ src: 'components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
-
-		</script>
+    </script>
+    <script src="components/q/q.js"></script>
 	</body>
 </html>
