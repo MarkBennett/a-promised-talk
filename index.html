@@ -15,7 +15,9 @@
 		<link rel="stylesheet" href="components/reveal.js/css/theme/default.css" id="theme">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="components/reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="components/reveal.js/lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="styles.css">
 
 		<script src="components/reveal.js/lib/js/head.min.js"></script>
 	</head>
@@ -24,7 +26,8 @@
 			<div class="slides">
 				<section>
 					<h1>A Promised Talk</h1>
-					<h3>Writing simple, readable, and maintatable asych JavaScript</h3>
+          <h3>Writing simple, readable, and maintatable asych JavaScript</h3>
+          <h4><a href="http://markbennett.ca">by Mark Bennett</a></h4>
 				</section>
         <section>
           <h2>JavaScript = Asynchronous Code</h2>
@@ -100,6 +103,16 @@ function(error_msg) {
               </code>
             </pre>
           </section>
+          <section>
+            <h2>Promise Implementations</h2>
+            <ul>
+              <li><a href="http://documentup.com/kriskowal/q/">Q</a></li>
+              <li><a href="http://jquery.com">jQuery</a></li>
+              <li><a href="https://github.com/cujojs/when">when.js</a></li>
+              <li><a href="http://docs.angularjs.org/api/ng.$q">Angular's $q</a></li>
+              <li>And more...</li>
+            </ul>
+          </section>
         </section>
         <section>
           <section>
@@ -108,40 +121,117 @@ function(error_msg) {
           <section>
             <pre>
               <code>
-var files = ['a.json','b.json','c.json'],
-    resources = [];
+var files = ['a.json','b.json','c.json'];
+
+Q.all(files.map(loadFile)).
+then(
+  function(content) {
+    // resources loaded
+    return createServer();
+  },
+  function(msg) {
+    app.error("Unable to load file:" + msg);
+  }
+).
+then(
+  function(server) {
+    // Server created
+    server.on_request = function(req) {
+      // Handle request...
+    };
+    return server.listen();
+  }, 
+  function(err_msg) {
+    app.error("Can't create the server");
+  }
+).
+then(
+  function(server) {
+    // Server is listening
+    return app.registerServer(server);
+  },
+  function(err_msg) {
+    app.error("Unable to start server! " + msg); 
+  }
+).
+then(undefined, function(err_msg) {
+  app.error("Unable to register that this server is running.");
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Improvements</h3>
+            <ol>
+              <li>Linear story</li>
+              <li>Less nesting</li>
+              <li>File loading progress</li>
+              <li>Captures thrown exceptions</li>
+            </ol>
+          </section>
+          <section>
+            <h3>Issues</h3>
+            <ol>
+              <li>Too many callbacks</li>
+              <li>A bit longer</li>
+            </ol>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Error Handling</h2>
+          </section>
+          <section>
+            <h3>The code</h3>
+            <pre>
+              <code>
+var files = ['a.json','b.json','c.json'];
 
 Q.all(files.map(loadFile)).
 then(function(content) {
   // resources loaded
   return createServer();
-}, function(msg) {
-  app.error("Unable to load file:" + msg);
 }).
 then(function(server) {
+  // Server created
   server.on_request = function(req) {
     // Handle request...
   };
   return server.listen();
-}, function(err_msg) {
-  app.error("Can't create the server");
 }).
 then(function(server) {
   // Server is listening
-  app.registerServer(server, function(app, err) {
-    if (err !== undefined) {
-      app.error("Unable to register that this server is running.");
-    }
-  });
-  },
-  function(err_msg) {
-    app.error("Unable to start server! " + msg); 
+  return app.registerServer(server);
+}).
+fail(function(err_msg) {
+  app.error("Unable to initialize server. Root cause = " + err_msg);
 });
+              </code>
+            </pre>  
+          </section>
+          <section>
+            <h3>What happened?!</h3>
+          </section>
+          <section>
+            <h3>One fail() = many errors</h3>
+            <pre>
+              <code>
+try {
+  createServer();
+  server.on_request = function(req) { /* snip */ };
+  server.listen();
+  app.registerServer(server);
+} catch (err) {
+  app.error("Unable to initialize server. Root cause = " + err_msg);
+}
               </code>
             </pre>
           </section>
         </section>
-			</div>
+      </div>
+      <div id="tagline">
+        Tweet at <a href="https://twitter.com/markbennett">@MarkBennett</a>
+      </div>
 		</div>
 
 		<script src="components/reveal.js/js/reveal.js"></script>
