@@ -111,9 +111,7 @@ function(error_msg) {
 var files = ['a.json','b.json','c.json'],
     resources = [];
 
-Q.all(files.map(function(file) {
-  return loadFile(file);
-})).
+Q.all(files.map(loadFile)).
 then(function(content) {
   // resources loaded
   return createServer();
