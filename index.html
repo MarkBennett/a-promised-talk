@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Test</title>
+		<title>A Promised Talk by @MarkBennett</title>
 
 		<meta name="description" content="A Promised Talk is a presentation on using CommonJS promises to make simple, readable, and maintainable asynchronous code in JavaScript.">
 		<meta name="author" content="Mark Bennett">
@@ -28,6 +28,9 @@
 					<h1>A Promised Talk</h1>
           <h3>Writing simple, readable, and maintatable asych JavaScript</h3>
           <h4><a href="http://markbennett.ca">by Mark Bennett</a></h4>
+				</section>
+        <section>
+          <h2>Who am I?</h2>
 				</section>
         <section>
           <h2>JavaScript = Asynchronous Code</h2>
@@ -98,7 +101,43 @@ a_promise.then(function(file) {
   // The awesome goes here
 },
 function(error_msg) {
-  // Handle the errors
+  // Optional, error handling
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Promises follow promises</h3>
+            <pre>
+              <code>
+retrieveFile().then(function(file) {
+  // The awesome goes here
+  return "output";
+}.then(function(output_from_first_promise) {
+  // My input is the output of the last then()
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>You can also make your own promises</h3>
+            <pre>
+              <code>
+function promised_val(input) {
+  // A deferred captures the state of the work promised
+  var deferred = Q.defer();
+
+  // do work
+  setTimeout(function() {
+     deferred.resolve("Awesome, " + input + "!");
+  }, 1000);
+
+  // return the promise
+  return deferred.promise;
+}
+
+promised_val("sauce").then(function(val) {
+  console.log(val);
 });
               </code>
             </pre>
@@ -127,7 +166,7 @@ Q.all(files.map(loadFile)).
 then(
   function(content) {
     // resources loaded
-    return createServer();
+    return createServer(content);
   },
   function(msg) {
     app.error("Unable to load file:" + msg);
@@ -227,6 +266,13 @@ try {
               </code>
             </pre>
           </section>
+        </section>
+        <section>
+          <h2>Where next?</h2>
+          <ul>
+            <li></li>
+            <li><a href="http://blog.jcoglan.com/2013/03/30/callbacks-are-imperative-promises-are-functional-nodes-biggest-missed-opportunity/">Callbacks are imperitive, promises are functional</a></li>
+          </ul>
         </section>
       </div>
       <div id="tagline">
