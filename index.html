@@ -143,6 +143,44 @@ promised_val("sauce").then(function(val) {
             </pre>
           </section>
           <section>
+            <h3>Chain together new promises</h3>
+            <pre>
+              <code>
+retrieveFile().then(function(file) {
+  // Triggered after the file is retrieved
+  var deferred = Q.defer(),
+      promise = deferred.promise;
+
+  setTimeout(function() {
+    deferred.resolve("A promised value");
+  }, 5000);
+
+  return promise;
+}.then(function(val) {
+  // Logs "A promised value" after 5 seconds
+  console.log(val);
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Manipulate promises</h3>
+            <pre>
+              <code>
+var array_of_values   = [1, 2, 3],
+    array_of_promises = array_of_values.map(promise_returning_func);
+
+Q.all(array_of_promises).
+then(function(array_of_outputs) {
+  // Called with the results of each promise
+  // but only after their all done
+}).fail(function() {
+  // Triggered if any of the promises fail
+});
+              </code>
+            </pre>
+          </section>
+          <section>
             <h2>Promise Implementations</h2>
             <ul>
               <li><a href="http://documentup.com/kriskowal/q/">Q</a></li>
@@ -156,6 +194,17 @@ promised_val("sauce").then(function(val) {
         <section>
           <section>
             <h2>Improving readability</h2>
+          </section>
+          <section>
+            <h3>Replace callback with functions returning promises</h3>
+            <pre>
+              <code>
+function loadFile(file_path)
+function createServer(content)
+server.prototype.listen = function();
+app.registerServer = function(server);
+              </code>
+            </pre>
           </section>
           <section>
             <pre>
