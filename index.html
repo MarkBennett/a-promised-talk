@@ -93,28 +93,63 @@
             <blockquote cite="http://promises-aplus.github.com/promises-spec/">A promise represents a value that may not be available yet. The primary method for interacting with a promise is its then() method.</blockquote>
           </section>
           <section>
+            <h3>A promise of a future value</h3>
+            <ul>
+              <li>Unresolved - no value yet</li>
+              <li>Resolved - the promise is fullfilled</li>
+              <li>Rejected - the promise was a failure</li>
+            </ul>
+          </section>
+          <section>
             <h3>An example</h3>
             <pre>
               <code>
 var a_promise = retrieveFile();
 a_promise.then(function(file) {
   // The awesome goes here
-},
-function(error_msg) {
-  // Optional, error handling
 });
               </code>
             </pre>
           </section>
           <section>
-            <h3>Promises follow promises</h3>
+            <h3>Handle rejection well</h3>
+            <pre>
+              <code>
+var a_promise = retrieveFile();
+a_promise.then(function(file) {
+  // The awesome goes here
+},
+function(rejection_msg) {
+  // Optional, error handling for when the promise is rejected
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Chain together promises</h3>
+            <p>* Notice the output of the first, becomes the input to the second</p>
             <pre>
               <code>
 retrieveFile().then(function(file) {
-  // The awesome goes here
-  return "output";
-}.then(function(output_from_first_promise) {
-  // My input is the output of the last then()
+  return "returned from first promise";
+}.then(function(input) {
+  input === "returned from first promise";
+});
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h3>Save a promise for later</h3>
+            <pre>
+              <code>
+var promise = retrieveFile();
+
+// ..later on that same day
+
+promise.then(function(file) {
+  // Even if the promise was resolved a long time before
+  // you can still add a then() to access it's value.
+  // Try doing that with a callback!
 });
               </code>
             </pre>
@@ -124,7 +159,7 @@ retrieveFile().then(function(file) {
             <pre>
               <code>
 function promised_val(input) {
-  // A deferred captures the state of the work promised
+  // Create a deferred to handle the promised value
   var deferred = Q.defer();
 
   // do work
@@ -172,10 +207,10 @@ var array_of_values   = [1, 2, 3],
 
 Q.all(array_of_promises).
 then(function(array_of_outputs) {
-  // Called with the results of each promise
-  // but only after their all done
+  // Called after all the promises are fullfilled,
+  // with an array of the values from each promise
 }).fail(function() {
-  // Triggered if any of the promises fail
+  // Triggered if any of the promises in the array fail
 });
               </code>
             </pre>
@@ -184,7 +219,7 @@ then(function(array_of_outputs) {
             <h2>Promise Implementations</h2>
             <ul>
               <li><a href="http://documentup.com/kriskowal/q/">Q</a></li>
-              <li><a href="http://jquery.com">jQuery</a></li>
+              <li><a href="http://api.jquery.com/category/deferred-object/">jQuery Deffered</a></li>
               <li><a href="https://github.com/cujojs/when">when.js</a></li>
               <li><a href="http://docs.angularjs.org/api/ng.$q">Angular's $q</a></li>
               <li>And more...</li>
@@ -201,8 +236,8 @@ then(function(array_of_outputs) {
               <code>
 function loadFile(file_path)
 function createServer(content)
-server.prototype.listen = function();
-app.registerServer = function(server);
+server.prototype.listen = function()
+app.registerServer = function(server)
               </code>
             </pre>
           </section>
@@ -319,10 +354,12 @@ try {
         <section>
           <h2>Where next?</h2>
           <ul>
-            <li><a href="http://wiki.commonjs.org/wiki/Promises/A">Promise A spec</a></li>
-            <li><a href="http://promises-aplus.github.com/promises-spec/">Promise A+ spec</a></li>
+            <li><a href="http://api.jquery.com/category/deferred-object/">jQuery Deferred</a></li>
+            <li><a href="http://documentup.com/kriskowal/q/">Q.js</a></li>
             <li><a href="http://www.kendoui.com/blogs/teamblog/posts/13-03-28/what-is-the-point-of-promises.aspx">What's the point of promises?</a></li>
             <li><a href="http://blog.jcoglan.com/2013/03/30/callbacks-are-imperative-promises-are-functional-nodes-biggest-missed-opportunity/">Callbacks are imperitive, promises are functional</a></li>
+            <li><a href="http://wiki.commonjs.org/wiki/Promises/A">Promise A spec</a></li>
+            <li><a href="http://promises-aplus.github.com/promises-spec/">Promise A+ spec</a></li>
           </ul>
         </section>
         <section>
